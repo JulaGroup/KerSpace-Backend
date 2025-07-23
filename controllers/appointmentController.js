@@ -19,7 +19,6 @@ exports.getUserAppointments = async (req, res) => {
 };
 
 exports.getAllAppointments = async (req, res) => {
-  console.log("Fetching all appointments");
   const appointments = await Appointment.find().populate("userId propertyId");
   res.json(appointments);
 };

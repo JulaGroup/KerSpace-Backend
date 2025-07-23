@@ -1,7 +1,6 @@
 const Property = require("../models/Property.js");
 
 exports.getAllProperties = async (req, res) => {
-  console.log("Fetching all properties");
   const properties = await Property.find();
   // Only send the first image for each property
   const result = properties.map((property) => {
@@ -13,7 +12,6 @@ exports.getAllProperties = async (req, res) => {
 };
 
 exports.getAllFeaturedProperties = async (req, res) => {
-  console.log("Fetching all featured properties");
   const properties = await Property.find({ featured: true });
   res.json(properties);
 };
@@ -45,7 +43,6 @@ exports.editProperty = async (req, res) => {
 };
 
 exports.deleteProperty = async (req, res) => {
-  console.log("Deleting property");
   const property = await Property.findByIdAndDelete(req.params.id);
   if (!property) return res.status(404).json({ message: "Property not found" });
   res.json({ message: "Property deleted" });
