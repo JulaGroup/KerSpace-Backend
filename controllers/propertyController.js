@@ -1,5 +1,34 @@
 const Property = require("../models/Property.js");
 
+exports.searchProperties = async (req, res) => {
+  console.log("Search query:", req.query);
+  const query = {};
+  if (req.query.type) query.type = req.query.type;
+  if (req.query.status) query.status = req.query.status;
+  if (req.query.location) {
+    query.$or = [
+      { "location.city": { $regex: req.query.location, $options: "i" } },
+      { "location.state": { $regex: req.query.location, $options: "i" } },
+      { "location.address": { $regex: req.query.location, $options: "i" } },
+    ];
+  }
+  if (req.query.bedrooms) query.bedrooms = { $gte: Number(req.query.bedrooms) };
+  if (req.query.bathrooms)
+    query.bathrooms = { $gte: Number(req.query.bathrooms) };
+  if (req.query.priceMin || req.query.priceMax) {
+    query.price = {};
+    if (req.query.priceMin) query.price.$gte = Number(req.query.priceMin);
+    if (req.query.priceMax) query.price.$lte = Number(req.query.priceMax);
+  }
+  if (req.query.sizeMin || req.query.sizeMax) {
+    query.size = {};
+    if (req.query.sizeMin) query.size.$gte = Number(req.query.sizeMin);
+    if (req.query.sizeMax) query.size.$lte = Number(req.query.sizeMax);
+  }
+  const properties = await Property.find(query);
+  res.json(properties);
+};
+
 exports.getAllProperties = async (req, res) => {
   const properties = await Property.find();
   // Only send the first image for each property

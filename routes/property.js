@@ -4,6 +4,7 @@ const { isAuthenticated, isAdmin } = require("../middleware/auth.js");
 
 const router = express.Router();
 
+router.get("/search", propertyController.searchProperties);
 router.get("/", propertyController.getAllProperties);
 router.get("/featured", propertyController.getAllFeaturedProperties);
 router.get("/:id", propertyController.getPropertyById);
@@ -15,5 +16,6 @@ router.delete(
   isAdmin,
   propertyController.deleteProperty
 );
+router.get("/search", propertyController.searchProperties);
 
 module.exports = router;

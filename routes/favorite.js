@@ -6,5 +6,9 @@ const router = express.Router();
 
 router.post("/:propertyId", isAuthenticated, favoriteController.addFavorite);
 router.get("/", isAuthenticated, favoriteController.getFavorites);
-
+router.delete(
+  "/:propertyId",
+  isAuthenticated,
+  favoriteController.removeFavorite
+);
 module.exports = router;
