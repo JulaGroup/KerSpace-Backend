@@ -1,7 +1,6 @@
 const Property = require("../models/Property.js");
 
 exports.searchProperties = async (req, res) => {
-  console.log("Search query:", req.query);
   const query = {};
   if (req.query.type) query.type = req.query.type;
   if (req.query.status) query.status = req.query.status;
