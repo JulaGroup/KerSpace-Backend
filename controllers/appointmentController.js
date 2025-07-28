@@ -1,11 +1,15 @@
 const Appointment = require("../models/Appointment.js");
 
 exports.bookAppointment = async (req, res) => {
-  const { propertyId, date, status } = req.body;
+  const { propertyId, date, time, message, email, phone, status } = req.body;
   const appointment = await Appointment.create({
     userId: req.user._id,
     propertyId,
     date,
+    time,
+    message,
+    email,
+    phone,
     status: status || "pending",
   });
   res.status(201).json(appointment);
