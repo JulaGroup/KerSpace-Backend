@@ -11,4 +11,10 @@ router.delete(
   isAuthenticated,
   favoriteController.removeFavorite
 );
+router.get(
+  "/properties",
+  isAuthenticated,
+  favoriteController.getFavoriteProperties
+);
+
 module.exports = router;
