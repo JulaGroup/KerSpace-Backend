@@ -21,6 +21,9 @@ const propertySchema = new mongoose.Schema(
       phone: String,
     },
     images: [{ type: String }],
+    available: { type: Boolean, default: true },
+    totalUnits: { type: Number }, // for apartments
+    availableUnits: { type: Number }, // for apartments
     // vendorId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     // vendorName: String,
     // vendorContact: String,

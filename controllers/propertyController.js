@@ -45,8 +45,13 @@ exports.getAllFeaturedProperties = async (req, res) => {
 };
 
 exports.getPropertyById = async (req, res) => {
-  const property = await Property.findById(req.params.id);
-  if (!property) return res.status(404).json({ message: "Property not found" });
+  let property;
+  try {
+    property = await Property.findById(req.params.id);
+  } catch (err) {
+    return res.status(404).json({ message: "Listing not available" });
+  }
+  if (!property) return res.status(404).json({ message: "Listing not available" });
   res.json(property);
 };
 
