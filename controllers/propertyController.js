@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Property = require("../models/Property.js");
 
 exports.searchProperties = async (req, res) => {
@@ -45,13 +46,15 @@ exports.getAllFeaturedProperties = async (req, res) => {
 };
 
 exports.getPropertyById = async (req, res) => {
-  let property;
-  try {
-    property = await Property.findById(req.params.id);
-  } catch (err) {
-    return res.status(404).json({ message: "Listing not available" });
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res
+      .status(404)
+      .json({ message: "Page does not exist or invalid property ID." });
   }
-  if (!property) return res.status(404).json({ message: "Listing not available" });
+  const property = await Property.findById(id);
+  if (!property)
+    return res.status(404).json({ message: "Listing not available" });
   res.json(property);
 };
 
