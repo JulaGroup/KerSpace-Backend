@@ -16,6 +16,5 @@ router.delete(
   isAdmin,
   propertyController.deleteProperty
 );
-router.get("/search", propertyController.searchProperties);
 
 module.exports = router;

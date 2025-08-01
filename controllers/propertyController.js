@@ -2,6 +2,9 @@ const mongoose = require("mongoose");
 const Property = require("../models/Property.js");
 
 exports.searchProperties = async (req, res) => {
+  const limit = parseInt(req.query.limit) || 10; // default 10 items per page
+  const offset = parseInt(req.query.offset) || 0;
+
   const query = {};
   if (req.query.type) query.type = req.query.type;
   if (req.query.status) query.status = req.query.status;
@@ -25,19 +28,48 @@ exports.searchProperties = async (req, res) => {
     if (req.query.sizeMin) query.size.$gte = Number(req.query.sizeMin);
     if (req.query.sizeMax) query.size.$lte = Number(req.query.sizeMax);
   }
-  const properties = await Property.find(query);
-  res.json(properties);
+  const totalProperties = await Property.countDocuments(query);
+  const properties = await Property.find(query)
+    .limit(limit)
+    .skip(offset)
+    .sort({ createdAt: -1 }); // newest first
+
+  res.json({
+    properties,
+    pagination: {
+      total: totalProperties,
+      offset,
+      limit,
+      hasMore: offset + properties.length < totalProperties,
+    },
+  });
 };
 
 exports.getAllProperties = async (req, res) => {
-  const properties = await Property.find();
+  const limit = parseInt(req.query.limit) || 10;
+  const offset = parseInt(req.query.offset) || 0;
+
+  const totalProperties = await Property.countDocuments();
+  const properties = await Property.find()
+    .limit(limit)
+    .skip(offset)
+    .sort({ createdAt: -1 });
+
   // Only send the first image for each property
   const result = properties.map((property) => {
     const obj = property.toObject();
     obj.images = obj.images && obj.images.length > 0 ? [obj.images[0]] : [];
     return obj;
   });
-  res.json(result);
+  res.json({
+    properties: result,
+    pagination: {
+      total: totalProperties,
+      offset,
+      limit,
+      hasMore: offset + properties.length < totalProperties,
+    },
+  });
 };
 
 exports.getAllFeaturedProperties = async (req, res) => {
