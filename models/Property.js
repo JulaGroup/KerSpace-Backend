@@ -7,7 +7,6 @@ const propertySchema = new mongoose.Schema(
     currency: {
       type: String,
       enum: ["GMD", "USD", "GBP"],
-      default: "GMD",
     }, // GMD = Dalasi, USD = Dollars, GBP = Pound
     size: Number,
     bedrooms: Number,
