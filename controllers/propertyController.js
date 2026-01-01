@@ -103,7 +103,13 @@ exports.addProperty = async (req, res) => {
 };
 
 exports.editProperty = async (req, res) => {
-  const property = await Property.findByIdAndUpdate(req.params.id, req.body, {
+  // Ensure images is always an array if provided
+  let updateData = { ...req.body };
+  if (updateData.images && !Array.isArray(updateData.images)) {
+    updateData.images = [updateData.images];
+  }
+
+  const property = await Property.findByIdAndUpdate(req.params.id, updateData, {
     new: true,
     runValidators: true,
   });
