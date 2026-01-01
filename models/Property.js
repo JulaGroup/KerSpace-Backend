@@ -4,6 +4,11 @@ const propertySchema = new mongoose.Schema(
     title: { type: String, required: true },
     description: String,
     price: Number,
+    currency: {
+      type: String,
+      enum: ["GMD", "USD", "GBP"],
+      default: "GMD",
+    }, // GMD = Dalasi, USD = Dollars, GBP = Pound
     size: Number,
     bedrooms: Number,
     bathrooms: Number,
