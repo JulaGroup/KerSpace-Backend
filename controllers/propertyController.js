@@ -105,6 +105,7 @@ exports.addProperty = async (req, res) => {
 exports.editProperty = async (req, res) => {
   const property = await Property.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
+    runValidators: true,
   });
   if (!property) return res.status(404).json({ message: "Property not found" });
   res.json(property);
